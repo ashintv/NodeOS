@@ -1,14 +1,23 @@
-import express from 'express'
+import express from "express";
+import { UserRouter } from "./routes/user";
+import { WorkflowRouter } from "./routes/workflow";
+import { CredentialRouter } from "./routes/credential";
+import { WebhookRouter } from "./routes/webhook";
+import { mongoose } from "@repo/backend-core/db";
+const app = express();
 
-const app = express()
+app.use(express.json());
 
+app.use("/api/v1/user", UserRouter);
+app.use("/api/v1/workflow", WorkflowRouter);
+app.use("/api/v1/credential", CredentialRouter);
+app.use("/api/v1/webhook", WebhookRouter);
 
-app.use(express.json())
+async function Starserver() {
+    await mongoose.connect("mongodb://localhost:27017/x4x_db_v0");
+	app.listen(3000, () => {
+		console.log("Server started successfully");
+	});
+}
 
-
-
-
-
-app.listen(3000 , ()=>{
-    console.log("Server started successfully")
-})
+Starserver();

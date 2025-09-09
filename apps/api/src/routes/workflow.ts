@@ -2,9 +2,9 @@ import { WorkflowModel } from "@repo/backend-core/db";
 import { WorkflowSchema } from "@repo/definitions/schema";
 import { json, Router } from "express";
 
-const WorflowRouter: Router = Router();
+export const WorkflowRouter: Router = Router();
 
-WorflowRouter.post("/", async (req, res) => {
+WorkflowRouter.post("/", async (req, res) => {
 	const userId = req.userId;
 	const parse = WorkflowSchema.safeParse(req.body);
 	if (!parse.success) {
@@ -23,7 +23,7 @@ WorflowRouter.post("/", async (req, res) => {
 	}
 });
 
-WorflowRouter.get("/", async (req, res) => {
+WorkflowRouter.get("/", async (req, res) => {
 	const userId = req.userId;
 	try {
 		const workflows = await WorkflowModel.find({
@@ -38,16 +38,16 @@ WorflowRouter.get("/", async (req, res) => {
 	}
 });
 
-WorflowRouter.get("/:id", async (req, res) => {
-	const _id = req.params;
-	if (_id) {
+WorkflowRouter.get("/:id", async (req, res) => {
+	const {id} = req.params;
+	if (!id) {
 		res.status(404).json({
 			message: "Invalid if",
 		});
 		return;
 	}
 	try {
-		const workflow = await WorkflowModel.findById(_id);
+		const workflow = await WorkflowModel.findById(id);
 		if (!workflow) {
 			res.status(404).json({
 				message: "Invalid if",
@@ -61,22 +61,25 @@ WorflowRouter.get("/:id", async (req, res) => {
 	}
 });
 
-WorflowRouter.put("/:id", async (req, res) => {
+
+
+WorkflowRouter.put("/:id", async (req, res) => {
 	const userId = req.userId;
 	const parse = WorkflowSchema.safeParse(req.body);
 	if (!parse.success) {
 		res.status(404).json({ message: "Parseing failed" });
 		return;
 	}
-	const _id = req.params;
-	if (_id) {
+	const {id } = req.params;
+	console.log(id);
+	if (!id) {
 		res.status(404).json({
-			message: "Invalid if",
+			message: "Invalid id",
 		});
 		return;
 	}
 	try {
-		const workflow = await WorkflowModel.findByIdAndUpdate(_id, {
+		const workflow = await WorkflowModel.findByIdAndUpdate(id, {
 			...parse.data,
 			userId,
 		});

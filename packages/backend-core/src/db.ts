@@ -1,6 +1,7 @@
 import { supportedPlatforms } from "@repo/definitions/schema";
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import { Types } from "mongoose";
+
 
 const UserSchema = new Schema({
 	email: { type: String, required: true },
@@ -10,7 +11,7 @@ const UserSchema = new Schema({
 const CredentialSchema = new Schema({
 	userId: { type: Types.ObjectId, ref: "user" },
 	title: { type: String, required: true },
-	platform: { type: String, enum: supportedPlatforms.options, require },
+	platform: { type: String, enum: supportedPlatforms.options, required: true },
 	data: {},
 });
 
@@ -27,3 +28,4 @@ const WorkflowSchema = new Schema({
 export const WorkflowModel = model("workflow", WorkflowSchema);
 export const UserModel = model("user", UserSchema);
 export const CredentialModel = model("creadetial", CredentialSchema);
+export { mongoose };

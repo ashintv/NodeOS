@@ -14,7 +14,7 @@ UserRouter.post("/signup", async (req, res) => {
 	const { email, password } = parse.data;
 	try {
 		const user = await UserModel.findOne({ email });
-		if (!user) {
+		if (user) {
 			res.status(404).json({ message: "User with email already exist" });
 			return;
 		}
