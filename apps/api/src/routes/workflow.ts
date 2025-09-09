@@ -5,7 +5,6 @@ import { json, Router } from "express";
 const WorflowRouter: Router = Router();
 
 WorflowRouter.post("/", async (req, res) => {
-	//@ts-ignore
 	const userId = req.userId;
 	const parse = WorkflowSchema.safeParse(req.body);
 	if (!parse.success) {
@@ -25,7 +24,6 @@ WorflowRouter.post("/", async (req, res) => {
 });
 
 WorflowRouter.get("/", async (req, res) => {
-	//@ts-ignore
 	const userId = req.userId;
 	try {
 		const workflows = await WorkflowModel.find({
@@ -64,7 +62,6 @@ WorflowRouter.get("/:id", async (req, res) => {
 });
 
 WorflowRouter.put("/:id", async (req, res) => {
-	//@ts-ignore
 	const userId = req.userId;
 	const parse = WorkflowSchema.safeParse(req.body);
 	if (!parse.success) {
