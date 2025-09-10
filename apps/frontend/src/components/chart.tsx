@@ -15,8 +15,8 @@ import "@xyflow/react/dist/style.css";
 import { useCallback } from "react";
 import { BaseNodE } from "./nodes/triger-nodes/basic";
 
-export const nodesTypes= {
-	"basic": BaseNodE,
+export const nodesTypes = {
+	basic: BaseNodE,
 };
 
 const initialNodes: Node[] = [
@@ -24,29 +24,19 @@ const initialNodes: Node[] = [
 		id: "1",
 		type: "basic",
 		position: { x: 100, y: 100 },
-		data: { type:"TRIGGER",
-            Action:'GMAIL',
-            description: "Trigger when a new email arrives"
-         },
+		data: { type: "TRIGGER", Action: "GMAIL", description: "Trigger when a new email arrives" },
 	},
 	{
 		id: "2",
-        type:"basic",
+		type: "basic",
 		position: { x: 300, y: 200 },
-		data: { type:"ACTION",
-            Action:'GMAIL',
-            description: "Process the incoming email"
-         },
-
+		data: { type: "ACTION", Action: "GMAIL", description: "Process the incoming email" },
 	},
 	{
 		id: "3",
-        type:"basic",
+		type: "basic",
 		position: { x: 500, y: 100 },
-		data: { type:"ACTION",
-            Action:'TELEGRAM',
-            description: "Send the processed email"
-         },
+		data: { type: "ACTION", Action: "TELEGRAM", description: "Send the processed email" },
 	},
 ];
 
@@ -70,10 +60,14 @@ export function GraphChart() {
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
 	const onConnect = useCallback((connection: Connection) => {
-		const edge = { ...connection, animated: true, source: connection.source ?? "",   // ensure string
-      target: connection.target ?? "",   // ensure string
-      sourceHandle: connection.sourceHandle ?? null,
-      targetHandle: connection.targetHandle ?? null, };
+		const edge = {
+			...connection,
+			animated: true,
+			source: connection.source ?? "", // ensure string
+			target: connection.target ?? "", // ensure string
+			sourceHandle: connection.sourceHandle ?? null,
+			targetHandle: connection.targetHandle ?? null,
+		};
 		setEdges((prevEdges) => addEdge(edge, prevEdges));
 	}, []);
 
@@ -84,15 +78,14 @@ export function GraphChart() {
 				edges={edges}
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                nodeTypes={nodesTypes}
+				onConnect={onConnect}
+				nodeTypes={nodesTypes}
 				fitView
 				attributionPosition="bottom-left">
-                
 				<Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--workflow-background-dots)" />
-				<Controls className="bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-sm" />
+				<Controls className="bg-card border border-border rounded-lg shadow-sm" />
 				<MiniMap
-					className="bg-card/95 backdrop-blur-sm border border-border rounded-lg shadow-sm"
+					className="bg-card border border-border rounded-lg shadow-sm"
 					nodeColor="var(--workflow-node)"
 					maskColor="var(--workflow-minimap-mask)"
 				/>

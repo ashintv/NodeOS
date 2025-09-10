@@ -1,0 +1,122 @@
+import { Plus, Zap, Send, Database, Code, Globe, Calendar, Bell } from "lucide-react";
+import { GmailIcon } from "@/icons/gmail";
+import { TelagramIcon } from "@/icons/telegram";
+import type { NodeTemplate, Category } from "./types";
+
+export const nodeTemplates: NodeTemplate[] = [
+	// Trigger Nodes
+	{
+		id: "gmail-trigger",
+		name: "Gmail Trigger",
+		description: "Trigger when a new email arrives in Gmail",
+		category: "trigger",
+		type: "TRIGGER",
+		action: "GMAIL",
+		icon: <GmailIcon className="w-6 h-6" />,
+		tags: ["email", "google", "automation"],
+		popular: true,
+	},
+	{
+		id: "telegram-trigger",
+		name: "Telegram Trigger",
+		description: "Trigger when a new message is received in Telegram",
+		category: "trigger",
+		type: "TRIGGER",
+		action: "TELEGRAM",
+		icon: <TelagramIcon className="w-6 h-6" />,
+		tags: ["messaging", "telegram", "bot"],
+		popular: true,
+	},
+	{
+		id: "webhook-trigger",
+		name: "Webhook Trigger",
+		description: "Trigger when a webhook receives data",
+		category: "trigger",
+		type: "TRIGGER",
+		action: "SOURCE",
+		icon: <Globe className="w-6 h-6 text-blue-500" />,
+		tags: ["webhook", "api", "integration"],
+	},
+	{
+		id: "schedule-trigger",
+		name: "Schedule Trigger",
+		description: "Trigger at specific times or intervals",
+		category: "trigger",
+		type: "TRIGGER",
+		action: "SOURCE",
+		icon: <Calendar className="w-6 h-6 text-green-500" />,
+		tags: ["schedule", "cron", "time"],
+	},
+
+	// Action Nodes
+	{
+		id: "gmail-send",
+		name: "Send Gmail",
+		description: "Send an email through Gmail",
+		category: "action",
+		type: "ACTION",
+		action: "GMAIL",
+		icon: <GmailIcon className="w-6 h-6" />,
+		tags: ["email", "send", "google"],
+		popular: true,
+	},
+	{
+		id: "telegram-send",
+		name: "Send Telegram Message",
+		description: "Send a message to a Telegram chat or channel",
+		category: "action",
+		type: "ACTION",
+		action: "TELEGRAM",
+		icon: <TelagramIcon className="w-6 h-6" />,
+		tags: ["messaging", "telegram", "send"],
+		popular: true,
+	},
+	{
+		id: "http-request",
+		name: "HTTP Request",
+		description: "Make HTTP requests to any API or service",
+		category: "action",
+		type: "ACTION",
+		action: "SOURCE",
+		icon: <Globe className="w-6 h-6 text-purple-500" />,
+		tags: ["http", "api", "request"],
+	},
+	{
+		id: "database-insert",
+		name: "Database Insert",
+		description: "Insert data into a database",
+		category: "data",
+		type: "ACTION",
+		action: "SOURCE",
+		icon: <Database className="w-6 h-6 text-orange-500" />,
+		tags: ["database", "insert", "data"],
+	},
+	{
+		id: "code-execute",
+		name: "Execute Code",
+		description: "Run custom JavaScript code",
+		category: "action",
+		type: "ACTION",
+		action: "SOURCE",
+		icon: <Code className="w-6 h-6 text-gray-500" />,
+		tags: ["code", "javascript", "custom"],
+	},
+	{
+		id: "notification",
+		name: "Notification",
+		description: "Send push notifications",
+		category: "action",
+		type: "ACTION",
+		action: "SOURCE",
+		icon: <Bell className="w-6 h-6 text-yellow-500" />,
+		tags: ["notification", "alert", "push"],
+	},
+];
+
+export const categories: Category[] = [
+	{ id: "all", name: "All Nodes", icon: <Plus className="w-4 h-4" /> },
+	{ id: "trigger", name: "Triggers", icon: <Zap className="w-4 h-4" /> },
+	{ id: "action", name: "Actions", icon: <Send className="w-4 h-4" /> },
+	{ id: "data", name: "Data", icon: <Database className="w-4 h-4" /> },
+	{ id: "condition", name: "Logic", icon: <Code className="w-4 h-4" /> },
+];

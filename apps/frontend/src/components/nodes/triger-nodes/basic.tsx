@@ -32,12 +32,11 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 							</div>
 
 							<div>
-								<Button 
-									onClick={() => setNodes((nds) => nds.filter((n) => n.id !== id))} 
-									variant={"outline"} 
+								<Button
+									onClick={() => setNodes((nds) => nds.filter((n) => n.id !== id))}
+									variant={"outline"}
 									size="sm"
-									className="text-destructive hover:text-destructive hover:bg-destructive/10"
-								>
+									className="text-destructive hover:text-destructive hover:bg-destructive/10">
 									×
 								</Button>
 							</div>
@@ -68,7 +67,7 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 						iconBg: "bg-red-500/10",
 						iconBorder: "border-red-500/20",
 						textColor: "text-red-600",
-						buttonColor: "border-red-500/30 hover:bg-red-500/10 text-red-600"
+						buttonColor: "border-red-500/30 hover:bg-red-500/10 text-red-600",
 					};
 				case "TELEGRAM":
 					return {
@@ -79,7 +78,7 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 						iconBg: "bg-blue-500/10",
 						iconBorder: "border-blue-500/20",
 						textColor: "text-blue-600",
-						buttonColor: "border-blue-500/30 hover:bg-blue-500/10 text-blue-600"
+						buttonColor: "border-blue-500/30 hover:bg-blue-500/10 text-blue-600",
 					};
 				default:
 					return {
@@ -90,7 +89,7 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 						iconBg: "bg-secondary/10",
 						iconBorder: "border-secondary/20",
 						textColor: "text-secondary-foreground",
-						buttonColor: "border-secondary/30 hover:bg-secondary/10"
+						buttonColor: "border-secondary/30 hover:bg-secondary/10",
 					};
 			}
 		};
@@ -103,7 +102,7 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 				<Handle position={Position.Left} type="target" className="bg-chart-1 border-chart-1/50" />
 				<Handle position={Position.Bottom} type="source" className="bg-chart-3 border-chart-3/50" />
 				<Handle position={Position.Top} type="target" className="bg-chart-4 border-chart-4/50" />
-				
+
 				<BaseNodeHeader className={`border-b ${metadata.borderColor} bg-gradient-to-r ${metadata.color}`}>
 					{/* Action Node Header */}
 
@@ -112,25 +111,22 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 							<div className={`p-2 rounded-lg ${metadata.iconBg} border ${metadata.iconBorder}`}>
 								{data.Action === "GMAIL" && <GmailIcon className="size-5" />}
 								{data.Action === "TELEGRAM" && <TelagramIcon className="size-5" />}
-								{!data.Action || data.Action === "SOURCE" && <div className="size-5 rounded bg-secondary/50" />}
+								{!data.Action || (data.Action === "SOURCE" && <div className="size-5 rounded bg-secondary/50" />)}
 							</div>
 							<div>
 								<BaseNodeHeaderTitle className={`font-semibold ${metadata.textColor}`}>
 									{metadata.title}
 								</BaseNodeHeaderTitle>
-								<div className="text-xs text-muted-foreground">
-									{metadata.description}
-								</div>
+								<div className="text-xs text-muted-foreground">{metadata.description}</div>
 							</div>
 						</div>
 
 						<div>
-							<Button 
-								onClick={() => setNodes((nds) => nds.filter((n) => n.id !== id))} 
+							<Button
+								onClick={() => setNodes((nds) => nds.filter((n) => n.id !== id))}
 								variant={"outline"}
 								size="sm"
-								className="text-destructive hover:text-destructive hover:bg-destructive/10"
-							>
+								className="text-destructive hover:text-destructive hover:bg-destructive/10">
 								×
 							</Button>
 						</div>
@@ -142,10 +138,7 @@ export const BaseNodE = memo(({ data, id }: NodeProps<BasicNode>) => {
 					</div>
 				</BaseNodeContent>
 				<BaseNodeFooter className="bg-card/50">
-					<Button 
-						variant="outline" 
-						className={`nodrag w-full ${metadata.buttonColor}`}
-					>
+					<Button variant="outline" className={`nodrag w-full ${metadata.buttonColor}`}>
 						Configure Action
 					</Button>
 				</BaseNodeFooter>

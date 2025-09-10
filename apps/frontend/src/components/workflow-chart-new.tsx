@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "@xyflow/react/dist/style.css";
 import { Button } from "@/components/ui/button";
-import { Plus, Play, Square, Settings } from "lucide-react";
+import { Play, Square, Settings } from "lucide-react";
 import { GraphChart } from "./chart";
+import { AddNodeSelector } from "./add-node-selector";
 
 export function WorkflowChart() {
 	const [isRunning, setIsRunning] = useState(false);
@@ -21,18 +22,11 @@ export function WorkflowChart() {
 						<p className="text-muted-foreground text-sm">Design and execute your automation workflows</p>
 					</div>
 					<div className="flex items-center space-x-2">
-						<Button
-							size="sm"
-							className="bg-secondary border border-border text-secondary-foreground hover:bg-secondary/80">
-							<Plus className="h-4 w-4 mr-1" />
-							Add Node
-						</Button>
+						<AddNodeSelector />
 						<Button
 							onClick={toggleWorkflow}
 							size="sm"
-							className={`border border-border text-foreground hover:bg-secondary ${
-								isRunning ? "bg-red-600/20" : "bg-green-600/20"
-							}`}>
+							className={`border border-border text-white hover:opacity-90 ${isRunning ? "bg-chart-4" : "bg-chart-2"}`}>
 							{isRunning ? (
 								<>
 									<Square className="h-4 w-4 mr-1" />
@@ -58,13 +52,11 @@ export function WorkflowChart() {
 			</div>
 
 			{/* Status Bar */}
-			<div className="p-3 border-t border-border bg-muted/50 backdrop-blur-sm ">
+			<div className="p-3 border-t border-border bg-muted">
 				<div className="flex items-center justify-between text-sm">
 					<div className="flex items-center space-x-4 text-muted-foreground"></div>
 					<div className="flex items-center space-x-2">
-						<div
-							className={`w-2 h-2 rounded-full ${isRunning ? "bg-emerald-500" : "bg-muted-foreground"} animate-pulse`}
-						/>
+						<div className={`w-2 h-2 rounded-full ${isRunning ? "bg-chart-2" : "bg-muted-foreground"} animate-pulse`} />
 						<span className="text-muted-foreground">{isRunning ? "Running" : "Stopped"}</span>
 					</div>
 				</div>
