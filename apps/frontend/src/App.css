@@ -249,6 +249,36 @@
     min-height: 100vh;
   }
 
+  /* Aesthetic Sidebar - follows the main background theme */
+  .bg-aesthetic-sidebar {
+    background: linear-gradient(135deg,
+        var(--bg-aesthetic-primary) 0%,
+        var(--bg-aesthetic-secondary) 50%,
+        var(--bg-aesthetic-tertiary) 100%);
+    position: relative;
+    overflow: hidden;
+    opacity: 0.95;
+  }
+
+  .bg-aesthetic-sidebar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, var(--bg-aesthetic-overlay-blue), var(--bg-aesthetic-overlay-purple), var(--bg-aesthetic-overlay-teal));
+    opacity: 0.3;
+    z-index: -1;
+  }
+
+  .bg-aesthetic-sidebar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 1px 1px, var(--bg-aesthetic-grid) 1px, transparent 0);
+    background-size: 40px 40px;
+    opacity: 0.2;
+    z-index: -1;
+  }
+
   @keyframes float {
 
     0%,

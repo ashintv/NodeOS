@@ -43,11 +43,11 @@ export function Sidebar({ onViewChange, currentView }: SidebarProps) {
 					<Button
 						variant="ghost"
 						size="icon"
-						className="lg:hidden fixed top-4 left-4 z-50 bg-sidebar/80 backdrop-blur-sm border border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent">
+						className="lg:hidden fixed top-4 left-4 z-50 glass-effect text-sidebar-foreground hover:bg-sidebar-accent">
 						<Menu className="h-5 w-5" />
 					</Button>
 				</SheetTrigger>
-				<SheetContent side="left" className="w-80 bg-sidebar/95 backdrop-blur-xl border-sidebar-border">
+				<SheetContent side="left" className="w-80 bg-aesthetic-sidebar backdrop-blur-xl border-sidebar-border">
 					<SidebarContent
 						menuItems={menuItems}
 						additionalItems={additionalItems}
@@ -59,7 +59,7 @@ export function Sidebar({ onViewChange, currentView }: SidebarProps) {
 			</Sheet>
 
 			{/* Desktop Sidebar */}
-			<div className="hidden lg:flex w-80 bg-sidebar/95 backdrop-blur-xl border-r border-sidebar-border h-full">
+			<div className="hidden lg:flex w-80 bg-aesthetic-sidebar backdrop-blur-xl border-r border-sidebar-border h-full">
 				<SidebarContent
 					menuItems={menuItems}
 					additionalItems={additionalItems}
@@ -96,7 +96,7 @@ function SidebarContent({ menuItems, additionalItems, onViewChange, currentView,
 			{/* Logo Area */}
 			<div className="mb-8">
 				<div className="flex items-center space-x-3">
-					<div className="bg-gradient-to-r from-primary to-chart-5 p-2 rounded-lg">
+					<div className="bg-gradient-to-r from-primary to-chart-5 p-2 rounded-lg shadow-lg">
 						<Workflow className="h-6 w-6 text-primary-foreground" />
 					</div>
 					<div>
@@ -112,7 +112,7 @@ function SidebarContent({ menuItems, additionalItems, onViewChange, currentView,
 					onClick={toggleTheme}
 					variant="outline"
 					size="sm"
-					className="w-full flex items-center space-x-2 bg-sidebar-accent hover:bg-sidebar-accent/80 border-sidebar-border">
+					className="w-full flex items-center space-x-2 glass-effect hover:bg-sidebar-accent/80 border-sidebar-border/30">
 					{theme === "light" ? (
 						<>
 							<Moon className="h-4 w-4" />
@@ -142,8 +142,8 @@ function SidebarContent({ menuItems, additionalItems, onViewChange, currentView,
 							}}
 							className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
 								isActive
-									? "bg-sidebar-accent border border-sidebar-primary/30 text-sidebar-foreground shadow-sm"
-									: "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+									? "glass-effect border border-sidebar-primary/30 text-sidebar-foreground shadow-lg backdrop-blur-sm"
+									: "text-muted-foreground hover:glass-effect hover:text-sidebar-foreground hover:shadow-md hover:backdrop-blur-sm"
 							}`}>
 							<Icon className={`h-5 w-5 ${isActive ? "text-sidebar-primary" : ""}`} />
 							<div className="flex-1 text-left">
@@ -156,7 +156,7 @@ function SidebarContent({ menuItems, additionalItems, onViewChange, currentView,
 				})}
 			</div>
 
-			<Separator className="bg-sidebar-border mb-6" />
+			<Separator className="bg-sidebar-border/30 mb-6" />
 
 			{/* Additional Features */}
 			<div className="space-y-2 mb-6">
@@ -167,7 +167,7 @@ function SidebarContent({ menuItems, additionalItems, onViewChange, currentView,
 						<button
 							key={index}
 							disabled={item.disabled}
-							className="w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 text-muted-foreground/60 cursor-not-allowed">
+							className="w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 text-muted-foreground/60 cursor-not-allowed hover:bg-sidebar-accent/20">
 							<Icon className="h-5 w-5" />
 							<span className="font-medium">{item.label}</span>
 						</button>
@@ -175,11 +175,11 @@ function SidebarContent({ menuItems, additionalItems, onViewChange, currentView,
 				})}
 			</div>
 
-			<Separator className="bg-sidebar-border mb-6" />
+			<Separator className="bg-sidebar-border/30 mb-6" />
 
 			{/* Status */}
 			<div className="mt-auto">
-				<div className="bg-sidebar-accent/50 border border-sidebar-border rounded-lg p-4">
+				<div className="glass-effect rounded-lg p-4 border border-sidebar-border/30">
 					<div className="flex items-center space-x-2 mb-2">
 						<div className="w-2 h-2 bg-chart-2 rounded-full animate-pulse" />
 						<span className="text-sidebar-foreground text-sm font-medium">System Online</span>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BackgroundAesthetic } from "@/components/background-aesthetic";
 import { Sidebar } from "@/components/sidebar";
 import { OptionsButton } from "@/components/options-button";
-import { WorkflowChart } from "@/components/workflow-chart";
+import { WorkflowChart } from "@/components/workflow-chart-new";
 import { CredentialsForm } from "@/components/credentials-form";
 
 export default function Dashboard() {
