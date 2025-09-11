@@ -5,7 +5,7 @@ export const UserSchema = z.object({
 	password: z.string().min(3, "Invalid password (3 char)"),
 });
 
-export const supportedPlatforms = z.enum(["TELEGRAM", "WHATSAPP", "EMAIL"]);
+export const supportedPlatforms = z.enum(["Telegram", "Whatsapp", "Gmail"]);
 export type SupportedPlatforms = z.infer<typeof supportedPlatforms>;
 
 export const CredentialSchema = z.object({

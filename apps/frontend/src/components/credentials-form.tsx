@@ -1,93 +1,56 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { use, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Key, Plus, Trash2, Eye, EyeOff, Save, RefreshCw } from "lucide-react";
+import { Key, Plus, Trash2, RefreshCw } from "lucide-react";
+import { GmailCredentialForm, TelegramCredentialForm } from "@/components/forms";
+import axios from "axios";
+import { BASE_URL } from "@/config";
 
-const credentialSchema = z.object({
-	name: z.string().min(1, "Name is required"),
-	type: z.string().min(1, "Type is required"),
-	apiKey: z.string().min(1, "API Key is required"),
-	baseUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
-	description: z.string().optional(),
-});
-
-type CredentialFormData = z.infer<typeof credentialSchema>;
+type CredentialType = "Gmail" | "Telegram" | "";
 
 interface Credential {
 	id: string;
-	name: string;
-	type: string;
-	createdAt: string;
+	title: string;
+	platform: string;
 	status: "active" | "inactive";
 }
 
-const mockCredentials: Credential[] = [
-	{
-		id: "1",
-		name: "Gmail API",
-		type: "Google",
-		createdAt: "2025-01-10",
-		status: "active",
-	},
-	{
-		id: "2",
-		name: "Slack Webhook",
-		type: "Slack",
-		createdAt: "2025-01-09",
-		status: "active",
-	},
-	{
-		id: "3",
-		name: "Database Connection",
-		type: "PostgreSQL",
-		createdAt: "2025-01-08",
-		status: "inactive",
-	},
-];
-
 export function CredentialsForm() {
-	const [credentials, setCredentials] = useState<Credential[]>(mockCredentials);
-	const [showApiKey, setShowApiKey] = useState(false);
+	const [credentials, setCredentials] = useState<Credential[]>([]);
+
+	async function fetchCredentials() {
+		const response = await axios.get(BASE_URL + "/credential", {
+			headers: {
+				token: localStorage.getItem("token"),
+			},
+		});
+		if (response.status === 200) {
+			setCredentials(response.data.credentials);
+		}
+	}
+
+	useEffect(() => {
+		fetchCredentials();
+	}, []);
+
+	const [selectedCredentialType, setSelectedCredentialType] = useState<CredentialType>("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const form = useForm<CredentialFormData>({
-		resolver: zodResolver(credentialSchema),
-		defaultValues: {
-			name: "",
-			type: "",
-			apiKey: "",
-			baseUrl: "",
-			description: "",
-		},
-	});
-
-	const onSubmit = async (data: CredentialFormData) => {
+	const handleCredentialSubmit = async (data: { title: string; platform: string; data: any }) => {
 		setIsSubmitting(true);
 
 		try {
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-
-			// Add new credential to the list
-			const newCredential: Credential = {
-				id: Date.now().toString(),
-				name: data.name,
-				type: data.type,
-				createdAt: new Date().toISOString().split("T")[0],
-				status: "active",
-			};
-
-			setCredentials((prev) => [newCredential, ...prev]);
-			form.reset();
+			console.log("Sending credential data:", data);
+			await axios.post(BASE_URL + "/credential", data, {
+				headers: {
+					token: localStorage.getItem("token"),
+				},
+			});
+			fetchCredentials();
+			setSelectedCredentialType(""); // Reset form selection
 		} catch (error) {
 			console.error("Error saving credential:", error);
 		} finally {
@@ -122,7 +85,7 @@ export function CredentialsForm() {
 			</div>
 
 			<div className="flex-1 overflow-auto p-4 space-y-6">
-				{/* Add New Credential Form */}
+				{/* Credential Type Selector and Form */}
 				<Card className="backdrop-blur-xl bg-card/95 border-border">
 					<CardHeader>
 						<CardTitle className="text-card-foreground flex items-center space-x-2">
@@ -131,141 +94,55 @@ export function CredentialsForm() {
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<Form {...form}>
-							<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-									<FormField
-										control={form.control}
-										name="name"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-foreground font-medium">Credential Name</FormLabel>
-												<FormControl>
-													<Input
-														placeholder="My API Credential"
-														{...field}
-														className="bg-input/50 border-border text-foreground placeholder:text-muted-foreground focus:border-ring"
-													/>
-												</FormControl>
-												<FormMessage className="text-destructive" />
-											</FormItem>
-										)}
-									/>
+						<div className="space-y-6">
+							{/* Credential Type Selector */}
+							<div>
+								<label className="text-foreground font-medium text-sm">Select Credential Type</label>
+								<Select
+									onValueChange={(value: CredentialType) => setSelectedCredentialType(value)}
+									value={selectedCredentialType}>
+									<SelectTrigger className="bg-input/50 border-border text-foreground focus:border-ring mt-2">
+										<SelectValue placeholder="Choose a credential type" />
+									</SelectTrigger>
+									<SelectContent className="bg-popover border-border text-popover-foreground">
+										<SelectItem value="Gmail">Gmail API</SelectItem>
+										<SelectItem value="Telegram">Telegram Bot</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
 
-									<FormField
-										control={form.control}
-										name="type"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel className="text-foreground font-medium">Service Type</FormLabel>
-												<Select onValueChange={field.onChange} defaultValue={field.value}>
-													<FormControl>
-														<SelectTrigger className="bg-input/50 border-border text-foreground focus:border-ring">
-															<SelectValue placeholder="Select a service type" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent className="bg-popover border-border text-popover-foreground">
-														<SelectItem value="Google">Google Services</SelectItem>
-														<SelectItem value="Slack">Slack</SelectItem>
-														<SelectItem value="GitHub">GitHub</SelectItem>
-														<SelectItem value="PostgreSQL">PostgreSQL</SelectItem>
-														<SelectItem value="MongoDB">MongoDB</SelectItem>
-														<SelectItem value="Custom">Custom API</SelectItem>
-													</SelectContent>
-												</Select>
-												<FormMessage className="text-destructive" />
-											</FormItem>
-										)}
-									/>
+							{/* Conditional Form Rendering */}
+							{selectedCredentialType === "Gmail" && (
+								<div>
+									<div className="flex items-center space-x-2 mb-4">
+										<div className="h-0.5 bg-border flex-1"></div>
+										<span className="text-sm text-muted-foreground px-2">Gmail Credentials</span>
+										<div className="h-0.5 bg-border flex-1"></div>
+									</div>
+									<GmailCredentialForm onSubmit={handleCredentialSubmit} isSubmitting={isSubmitting} />
 								</div>
+							)}
 
-								<FormField
-									control={form.control}
-									name="apiKey"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel className="text-foreground font-medium">API Key / Token</FormLabel>
-											<FormControl>
-												<div className="relative">
-													<Input
-														type={showApiKey ? "text" : "password"}
-														placeholder="Enter your API key or token"
-														{...field}
-														className="bg-input/50 border-border text-foreground placeholder:text-muted-foreground focus:border-ring pr-10"
-													/>
-													<Button
-														type="button"
-														variant="ghost"
-														size="sm"
-														className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-foreground"
-														onClick={() => setShowApiKey(!showApiKey)}>
-														{showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-													</Button>
-												</div>
-											</FormControl>
-											<FormDescription className="text-muted-foreground">
-												Your API key will be encrypted and stored securely
-											</FormDescription>
-											<FormMessage className="text-destructive" />
-										</FormItem>
-									)}
-								/>
+							{selectedCredentialType === "Telegram" && (
+								<div>
+									<div className="flex items-center space-x-2 mb-4">
+										<div className="h-0.5 bg-border flex-1"></div>
+										<span className="text-sm text-muted-foreground px-2">Telegram Bot Credentials</span>
+										<div className="h-0.5 bg-border flex-1"></div>
+									</div>
+									<TelegramCredentialForm onSubmit={handleCredentialSubmit} isSubmitting={isSubmitting} />
+								</div>
+							)}
 
-								<FormField
-									control={form.control}
-									name="baseUrl"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel className="text-foreground font-medium">Base URL (Optional)</FormLabel>
-											<FormControl>
-												<Input
-													placeholder="https://api.example.com"
-													{...field}
-													className="bg-input/50 border-border text-foreground placeholder:text-muted-foreground focus:border-ring"
-												/>
-											</FormControl>
-											<FormMessage className="text-destructive" />
-										</FormItem>
-									)}
-								/>
-
-								<FormField
-									control={form.control}
-									name="description"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel className="text-foreground font-medium">Description (Optional)</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder="Describe what this credential is used for..."
-													{...field}
-													className="bg-input/50 border-border text-foreground placeholder:text-muted-foreground focus:border-ring resize-none"
-													rows={3}
-												/>
-											</FormControl>
-											<FormMessage className="text-destructive" />
-										</FormItem>
-									)}
-								/>
-
+							{selectedCredentialType && (
 								<Button
-									type="submit"
-									disabled={isSubmitting}
-									className="bg-gradient-to-r from-primary to-chart-5 hover:from-primary/90 hover:to-chart-5/90 text-primary-foreground">
-									{isSubmitting ? (
-										<>
-											<RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-											Saving...
-										</>
-									) : (
-										<>
-											<Save className="h-4 w-4 mr-2" />
-											Save Credential
-										</>
-									)}
+									variant="outline"
+									onClick={() => setSelectedCredentialType("")}
+									className="w-full border-border text-foreground hover:bg-accent">
+									Cancel & Choose Different Type
 								</Button>
-							</form>
-						</Form>
+							)}
+						</div>
 					</CardContent>
 				</Card>
 
@@ -292,10 +169,8 @@ export function CredentialsForm() {
 											} animate-pulse`}
 										/>
 										<div>
-											<h4 className="text-foreground font-medium">{credential.name}</h4>
-											<p className="text-muted-foreground text-sm">
-												{credential.type} • Created {credential.createdAt}
-											</p>
+											<h4 className="text-foreground font-medium">{credential.title}</h4>
+											<p className="text-muted-foreground text-sm">{credential.platform}</p>
 										</div>
 									</div>
 									<div className="flex items-center space-x-2">
