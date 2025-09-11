@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthForm } from "@/components/auth-form";
 import { BackgroundAesthetic } from "@/components/background-aesthetic";
+import { BASE_URL } from "@/config";
+import axios from "axios";
 
 interface SignUpData {
 	name: string;
@@ -13,18 +15,22 @@ interface SignUpData {
 export default function SignUp() {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
+	const backend_url = BASE_URL;
 
 	const handleSignUp = async (data: SignUpData) => {
 		setIsLoading(true);
 
 		try {
-			// TODO: Replace with actual API call
-			console.log("Sign up data:", data);
+			await axios.post(BASE_URL + "/user/signup", {
+				email: data.email,
+				password: data.password,
+			});
 
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-
-			// Handle successful sign up
+			const response = await axios.post(BASE_URL + "/user/signin", {
+				email: data.email,
+				password: data.password,
+			});
+			localStorage.setItem("token", response.data.token);
 			navigate("/dashboard");
 		} catch (error) {
 			console.error("Sign up error:", error);

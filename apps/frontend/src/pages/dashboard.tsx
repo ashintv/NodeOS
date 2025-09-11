@@ -12,7 +12,6 @@ export default function Dashboard() {
 	const handleViewChange = (view: "chart" | "credentials") => {
 		setCurrentView(view);
 	};
-
 	const renderMainContent = () => {
 		switch (currentView) {
 			case "chart":

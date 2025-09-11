@@ -20,3 +20,5 @@ export const WorkflowSchema = z.object({
 	nodes: z.any(),
 	connections: z.any(),
 });
+
+export type Workflow = z.infer<typeof WorkflowSchema>

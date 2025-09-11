@@ -12,64 +12,75 @@ import {
 	type Node,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { BaseNodE } from "./nodes/triger-nodes/basic";
+import { useGraphs } from "@/hooks/useFetchGraph";
+import { BASE_URL } from "@/config";
+import axios from "axios";
+import { useCurrentGraphStateStore } from "@/store/state-store";
 
 export const nodesTypes = {
 	basic: BaseNodE,
 };
 
-const initialNodes: Node[] = [
-	{
-		id: "1",
-		type: "basic",
-		position: { x: 100, y: 100 },
-		data: { type: "TRIGGER", Action: "GMAIL", description: "Trigger when a new email arrives" },
-	},
-	{
-		id: "2",
-		type: "basic",
-		position: { x: 300, y: 200 },
-		data: { type: "ACTION", Action: "GMAIL", description: "Process the incoming email" },
-	},
-	{
-		id: "3",
-		type: "basic",
-		position: { x: 500, y: 100 },
-		data: { type: "ACTION", Action: "TELEGRAM", description: "Send the processed email" },
-	},
-];
-
-const initialEdges: Edge[] = [
-	{
-		id: "e1-2",
-		source: "1",
-		target: "2",
-		animated: true,
-	},
-	{
-		id: "e2-3",
-		source: "2",
-		target: "3",
-		animated: true,
-	},
-];
-
 export function GraphChart() {
+	const { initialEdges, initialNodes, isLoaded } = useGraphs();
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+	useEffect(() => {
+		if (isLoaded && initialNodes.length > 0) {
+			setNodes(initialNodes);
+		}
+		if (isLoaded && initialEdges.length > 0) {
+			setEdges(initialEdges);
+		}
+	}, [isLoaded, initialNodes, setNodes, setEdges, initialEdges]);
+
+	const id = useCurrentGraphStateStore((state) => state.CurrentId);
+	const title = useCurrentGraphStateStore((state) => state.CurrentTitle);
 	const onConnect = useCallback((connection: Connection) => {
 		const edge = {
 			...connection,
 			animated: true,
-			source: connection.source ?? "", // ensure string
-			target: connection.target ?? "", // ensure string
+			source: connection.source ?? "",
+			target: connection.target ?? "",
 			sourceHandle: connection.sourceHandle ?? null,
 			targetHandle: connection.targetHandle ?? null,
 		};
 		setEdges((prevEdges) => addEdge(edge, prevEdges));
 	}, []);
+
+	useEffect(() => {
+		async function UpdateData(nodes: Node[], edges: Edge[], title: string) {
+			if (!isLoaded) return;
+			try {
+				await axios.put(
+					`${BASE_URL}/workflow/${id}`,
+					{
+						title,
+						enabled: true,
+						nodes: nodes,
+						connections: edges,
+					},
+					{
+						headers: {
+							token: localStorage.getItem("token"),
+						},
+					}
+				);
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		const handler = setTimeout(() => {
+			UpdateData(nodes, edges, title);
+		}, 800);
+
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [title, nodes, edges]);
 
 	return (
 		<div style={{ width: "100%", height: "100%" }}>

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthForm } from "@/components/auth-form";
 import { BackgroundAesthetic } from "@/components/background-aesthetic";
+import axios from "axios"
+import { BASE_URL } from "@/config";
+
 
 interface SignInData {
 	email: string;
@@ -11,18 +14,14 @@ interface SignInData {
 export default function SignIn() {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
-
 	const handleSignIn = async (data: SignInData) => {
 		setIsLoading(true);
-
 		try {
-			// TODO: Replace with actual API call
-			console.log("Sign in data:", data);
-
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-
-			// Handle successful sign in
+			const response = await axios.post(BASE_URL+"/user/signin", {
+				email: data.email,
+				password: data.password,
+			});
+			localStorage.setItem("token", response.data.token);
 			navigate("/dashboard");
 		} catch (error) {
 			console.error("Sign in error:", error);

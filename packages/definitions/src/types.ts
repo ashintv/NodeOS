@@ -8,5 +8,5 @@ export interface INode{
     notes:string,
     
 
-
 }
+

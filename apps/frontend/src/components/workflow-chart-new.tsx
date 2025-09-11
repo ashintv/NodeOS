@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Square, Settings } from "lucide-react";
 import { GraphChart } from "./chart";
 import { AddNodeSelector } from "./add-node-selector";
+import { useCurrentGraphStateStore } from "@/store/state-store";
 
 export function WorkflowChart() {
 	const [isRunning, setIsRunning] = useState(false);
@@ -11,15 +12,18 @@ export function WorkflowChart() {
 	const toggleWorkflow = () => {
 		setIsRunning(!isRunning);
 	};
-
+	const title = useCurrentGraphStateStore((state)=>state.CurrentTitle)
+	const SetTitle = useCurrentGraphStateStore((state) => state.setCurrentTitle);
 	return (
 		<div className="h-full flex flex-col">
 			{/* Header */}
 			<div className="p-4 border-b border-border">
 				<div className="flex items-center justify-between">
 					<div>
-						<h2 className="text-xl font-bold text-foreground">Workflow Builder</h2>
-						<p className="text-muted-foreground text-sm">Design and execute your automation workflows</p>
+						<input value={title} onChange={(e)=>{
+							SetTitle(e.target.value)
+						}} className="text-xl font-bold text-foreground focus:outline-1 p-1"></input>
+						<p className="text-muted-foreground text-sm">Click above to change tiltle</p>
 					</div>
 					<div className="flex items-center space-x-2">
 						<AddNodeSelector />
