@@ -115,7 +115,6 @@ interface SidebarContentProps {
 function SidebarContent({ menuItems, workflows, onViewChange, currentView, onItemClick }: SidebarContentProps) {
 	const { theme, toggleTheme } = useTheme();
 	const selected = useCurrentGraphStateStore((state) => state.CurrentId);
-	const setSelected = useCurrentGraphStateStore((state) => state.CurrentId);
 
 	return (
 		<div className="flex flex-col w-full p-6">

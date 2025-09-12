@@ -15,7 +15,7 @@ interface SignUpData {
 export default function SignUp() {
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
-	const backend_url = BASE_URL;
+	
 
 	const handleSignUp = async (data: SignUpData) => {
 		setIsLoading(true);
