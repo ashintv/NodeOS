@@ -7,6 +7,13 @@ export interface INode{
     disabled?:boolean,
     notes:string,
     
-
 }
 
+
+type Tool  = "callApi" 
+export interface AiNode{
+    model:string,
+    apiKey:string,
+    query:string,
+    tools:Tool[]
+}
