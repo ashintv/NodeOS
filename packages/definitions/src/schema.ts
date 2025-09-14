@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 export const UserSchema = z.object({
 	email: z.string().email(),
 	password: z.string().min(3, "Invalid password (3 char)"),
@@ -22,3 +23,6 @@ export const WorkflowSchema = z.object({
 });
 
 export type Workflow = z.infer<typeof WorkflowSchema>
+
+
+
