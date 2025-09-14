@@ -17,6 +17,24 @@ CredentialRouter.get("/", async (req, res) => {
 	}
 });
 
+CredentialRouter.get("/:platform", async (req, res) => {
+	const userId = req.userId;
+	const { platform } = req.params
+	try {
+		const credentials = await CredentialModel.find({ userId , platform });
+		res.json({
+			credentials,
+		});
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ message: "S" });
+	}
+});
+
+
+
+
+
 CredentialRouter.post("/", async (req, res) => {
 	const userId = req.userId;
 	const parse = CredentialSchema.safeParse(req.body);

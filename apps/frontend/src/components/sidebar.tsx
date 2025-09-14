@@ -203,6 +203,7 @@ function SidebarContent({ menuItems, workflows, onViewChange, currentView, onIte
 							enabled: true,
 						};
 						const response = await axios.post(BASE_URL + "/workflow", data, {
+							
 							headers: {
 								token: localStorage.getItem("token"),
 							},

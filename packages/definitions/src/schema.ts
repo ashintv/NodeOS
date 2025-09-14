@@ -23,6 +23,7 @@ export const WorkflowSchema = z.object({
 });
 
 export type Workflow = z.infer<typeof WorkflowSchema>
+export type CredentialsType = z.infer<typeof CredentialSchema>
 
 
 

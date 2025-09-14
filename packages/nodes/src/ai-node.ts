@@ -2,13 +2,14 @@ import { CredentialModel } from "@repo/backend-core/db";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import TOOLS_MAP from "./ai-agent-tools.ts/index.js";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { AINode } from "@repo/definitions/types";
+import { INodeData } from "@repo/definitions/types";
+
 
 /**
  * create and run a agent with the specified model and tools
  * @param node
  */
-async function useToolCal(node: AINode) {
+async function useToolCal(node: INodeData) {
 	// finf credential from db
 	// const api  =  await CredentialModel.findById(node.credential)
 	const apiKey = "AIzaSyDMe6hC35_3rBvYwApbxzoDpvbtg9SGfEo";
@@ -40,7 +41,7 @@ async function useToolCal(node: AINode) {
 	`;
 	const model = new ChatGoogleGenerativeAI({
 		apiKey,
-		temperature: node.temperature || 0,
+		temperature: 0.5,
 		model: "gemini-2.5-flash",
 	});
 
@@ -55,17 +56,9 @@ async function useToolCal(node: AINode) {
 				role: "system",
 				content: systemPrompt,
 			},
-			{ role: "user", content: node.prompt },
+			{ role: "user", content: node.message! },
 		],
 	});
 	console.log(resp);
 }
 
-useToolCal({
-	credential: "",
-	tools: {
-		callApi: [{ url: "https://jsonplaceholder.typicode.com/posts", desc: "get all post from jsonplaceholder" }],
-	},
-	prompt: "get me all post with title numberd", // decribe the job of ai
-	temperature: 0, // temperature for ai model
-});

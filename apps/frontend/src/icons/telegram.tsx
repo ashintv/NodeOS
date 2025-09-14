@@ -1,4 +1,4 @@
-export function TelagramIcon({ className }: { className: string }) {
+export function TelegramIcon({ className }: { className: string }) {
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 48 48">
 			<linearGradient

@@ -13,14 +13,18 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect } from "react";
-import { BaseNodE } from "./nodes/triger-nodes/basic";
 import { useGraphs } from "@/hooks/useFetchGraph";
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useCurrentGraphStateStore } from "@/store/state-store";
+import { TriggerNode } from "./nodes/trigger/trigger-node";
+import { GmailNode } from "./nodes/action/gmail";
+import { TelegramNode } from "./nodes/action/telagram";
 
 export const nodesTypes = {
-	basic: BaseNodE,
+	trigger: TriggerNode,
+	gmail: GmailNode,
+	telegram: TelegramNode,
 };
 
 export function GraphChart() {

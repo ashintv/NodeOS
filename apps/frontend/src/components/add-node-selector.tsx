@@ -1,114 +1,149 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
+import { Plus, Zap, Mail, MessageCircle } from "lucide-react";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useReactFlow } from "@xyflow/react";
-import type { NodeTypes, NodeAction } from "./nodes/config/node-types";
 
-import { SearchAndFilters, PopularNodesSection, NodesList, nodeTemplates, categories } from "./add-node";
-
-interface NodeTemplate {
-	id: string;
-	name: string;
-	description: string;
-	category: "trigger" | "action" | "condition" | "data";
-	type: NodeTypes;
-	action: NodeAction;
-	icon: React.ReactNode;
-	tags: string[];
-	popular?: boolean;
-}
+// Define available node types with their metadata
+const nodeTypes = [
+	{
+		type: "trigger",
+		category: "Triggers",
+		label: "Webhook Trigger",
+		description: "Start workflow with HTTP request",
+		icon: Zap,
+		data: {
+			description: "Webhook trigger node",
+			node_: {
+				credential: "",
+			},
+		},
+	},
+	{
+		type: "gmail",
+		category: "Actions",
+		label: "Gmail",
+		description: "Send email via Gmail",
+		icon: Mail,
+		data: {
+			Action: "GMAIL",
+			description: "Send email using Gmail",
+			node_: {
+				credential: "",
+				message: "",
+			},
+		},
+	},
+	{
+		type: "telegram",
+		category: "Actions",
+		label: "Telegram",
+		description: "Send message via Telegram bot",
+		icon: MessageCircle,
+		data: {
+			Action: "TELEGRAM",
+			description: "Send message using Telegram bot",
+			node_: {
+				credential: "",
+				message: "",
+			},
+		},
+	},
+];
 
 export function AddNodeSelector() {
-	const { setNodes } = useReactFlow();
-	const [searchTerm, setSearchTerm] = useState("");
-	const [selectedCategory, setSelectedCategory] = useState("all");
 	const [isOpen, setIsOpen] = useState(false);
+	const { addNodes, getViewport } = useReactFlow();
 
-	const filteredNodes = nodeTemplates.filter((node) => {
-		const matchesSearch =
-			node.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			node.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			node.tags.some((tag: string) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+	const handleAddNode = (nodeConfig: (typeof nodeTypes)[number]) => {
+		// Generate unique ID for the new node
+		const nodeId = `${nodeConfig.type}_${Date.now()}`;
 
-		const matchesCategory = selectedCategory === "all" || node.category === selectedCategory;
+		// Get current viewport to place node in visible area
+		const viewport = getViewport();
+		const centerX = -viewport.x + window.innerWidth / 2 / viewport.zoom;
+		const centerY = -viewport.y + window.innerHeight / 2 / viewport.zoom;
 
-		return matchesSearch && matchesCategory;
-	});
+		// Create the new node
+		const newNode = {
+			id: nodeId,
+			type: nodeConfig.type,
+			position: {
+				x: centerX + Math.random() * 100 - 50, // Add some random offset
+				y: centerY + Math.random() * 100 - 50,
+			},
+			data: nodeConfig.data,
+		};
 
-	const popularNodes = nodeTemplates.filter((node) => node.popular);
-	const showPopularSection = selectedCategory === "all" && searchTerm === "";
-
-	const handleNodeClick = (template: NodeTemplate) => {
-		setNodes((nodes) => {
-			const newId = String(nodes.length + 1);
-			const newNode = {
-				id: newId,
-				type: "basic",
-				position: {
-					x: Math.random() * 300 + 100,
-					y: Math.random() * 300 + 100,
-				},
-				data: {
-					type: template.type,
-					Action: template.action,
-					description: template.description,
-				},
-			};
-			return nodes.concat(newNode);
-		});
+		// Add the node to the flow
+		addNodes([newNode]);
 		setIsOpen(false);
 	};
 
+	// Group nodes by category
+	const triggerNodes = nodeTypes.filter((node) => node.category === "Triggers");
+	const actionNodes = nodeTypes.filter((node) => node.category === "Actions");
+
 	return (
-		<Sheet open={isOpen} onOpenChange={setIsOpen}>
-			<SheetTrigger asChild>
-				<Button
-					size="sm"
-					className="bg-secondary border border-border text-secondary-foreground hover:bg-secondary/80 text-xs sm:text-sm">
-					<Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-					<span className="hidden sm:inline">Add Node</span>
-					<span className="sm:hidden">Add</span>
+		<DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+					<Plus className="h-4 w-4 mr-1" />
+					Add Node
 				</Button>
-			</SheetTrigger>
-			<SheetContent className="w-full sm:w-[500px] md:w-[600px] lg:w-[700px] xl:w-[800px] max-w-[95vw] p-3 sm:p-5 flex flex-col">
-				<SheetHeader className="flex-shrink-0">
-					<SheetTitle className="text-lg sm:text-xl font-bold">Add Node</SheetTitle>
-					<SheetDescription className="text-sm sm:text-base">
-						Choose from our collection of nodes to build your workflow
-					</SheetDescription>
-				</SheetHeader>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end" className="w-64">
+				{/* Trigger Nodes Section */}
+				<DropdownMenuLabel className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+					Triggers
+				</DropdownMenuLabel>
+				{triggerNodes.map((node) => {
+					const IconComponent = node.icon;
+					return (
+						<DropdownMenuItem key={node.type} className="cursor-pointer p-3" onClick={() => handleAddNode(node)}>
+							<div className="flex items-center gap-3">
+								<div className="flex-shrink-0">
+									<IconComponent className="h-5 w-5 text-muted-foreground" />
+								</div>
+								<div className="flex-1 min-w-0">
+									<div className="font-medium text-sm">{node.label}</div>
+									<div className="text-xs text-muted-foreground truncate">{node.description}</div>
+								</div>
+							</div>
+						</DropdownMenuItem>
+					);
+				})}
 
-				<div className="flex flex-col flex-1 mt-4 sm:mt-6 min-h-0">
-					{/* Search and Filters */}
-					<div className="flex-shrink-0 mb-4 sm:mb-6">
-						<SearchAndFilters
-							searchTerm={searchTerm}
-							onSearchChange={setSearchTerm}
-							selectedCategory={selectedCategory}
-							onCategoryChange={setSelectedCategory}
-							categories={categories}
-						/>
-					</div>
+				<DropdownMenuSeparator />
 
-					{/* Popular Nodes Section */}
-					{showPopularSection && (
-						<div className="flex-shrink-0 mb-4 sm:mb-6">
-							<PopularNodesSection popularNodes={popularNodes} onNodeClick={handleNodeClick} />
-							<Separator className="mt-4 sm:mt-6" />
-						</div>
-					)}
-
-					{/* All Nodes Section */}
-					<NodesList
-						nodes={filteredNodes}
-						selectedCategory={selectedCategory}
-						categories={categories}
-						onNodeClick={handleNodeClick}
-					/>
-				</div>
-			</SheetContent>
-		</Sheet>
+				{/* Action Nodes Section */}
+				<DropdownMenuLabel className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+					Actions
+				</DropdownMenuLabel>
+				{actionNodes.map((node) => {
+					const IconComponent = node.icon;
+					return (
+						<DropdownMenuItem key={node.type} className="cursor-pointer p-3" onClick={() => handleAddNode(node)}>
+							<div className="flex items-center gap-3">
+								<div className="flex-shrink-0">
+									<IconComponent className="h-5 w-5 text-muted-foreground" />
+								</div>
+								<div className="flex-1 min-w-0">
+									<div className="font-medium text-sm">{node.label}</div>
+									<div className="text-xs text-muted-foreground truncate">{node.description}</div>
+								</div>
+							</div>
+						</DropdownMenuItem>
+					);
+				})}
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 }
