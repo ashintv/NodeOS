@@ -40,6 +40,6 @@ export interface INode {
 	label: string; // display label
 	description: string;
 	icon?: any;
-	data: INodeData;
+	data: any;
 	
 }
