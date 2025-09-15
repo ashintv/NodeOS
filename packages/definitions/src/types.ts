@@ -1,4 +1,4 @@
-type tools = "callApi" | "codeRun";
+export type Tools = "callApi" | "codeRun";
 
 
 
@@ -19,13 +19,15 @@ export type CodeRun = {
 	};
 };
 
+
+export type ToolsType = Partial<Record<Tools, (FetchAPi | CodeRun)[]>>;
 export type INodeData = {
 // node type
-	Action: "GMAIL" | "TELEGRAM"
+	Action: "GMAIL" | "TELEGRAM" | "AI" | "TOOL"
 	description: string;
 	credential: string;
 	message?: string; // prompt 
-	tools: Partial<Record<tools, (FetchAPi | CodeRun)[]>>;
+	tools: ToolsType
 	
 
 	// optional for triggers
@@ -33,7 +35,7 @@ export type INodeData = {
 };
 
 export interface INode {
-	type: "trigger" | "gmail" | "telegram" | "ai";
+	type: "trigger" | "gmail" | "telegram" | "ai" | "tool";
 	category: "Triggers" | "Actions";
 	label: string; // display label
 	description: string;

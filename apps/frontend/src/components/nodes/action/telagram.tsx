@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { TelegramIcon } from "@/icons/telegram";
 import type { NodeData } from "../types";
 import { CredentialSelector } from "../credential-selector";
+import { DeleteNode } from "../deleteNode";
 
 export const TelegramNode = memo(({ data, id }: NodeProps<NodeData>) => {
 	const [credential, setCredential] = useState(data.credential);
@@ -33,6 +34,7 @@ export const TelegramNode = memo(({ data, id }: NodeProps<NodeData>) => {
 			<BaseNodeHeader>
 				<TelegramIcon className="size-5" />
 				<BaseNodeHeaderTitle>Send a message(bot)</BaseNodeHeaderTitle>
+				<DeleteNode id={id} />
 			</BaseNodeHeader>
 			<BaseNodeContent className="flex gap-2">
 				<Textarea

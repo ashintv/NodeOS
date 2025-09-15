@@ -56,6 +56,22 @@ const nodeTypes = [
 			},
 		},
 	},
+	{
+		type: "ai",
+		category: "Actions",
+		label: "AI Agent",
+		description: "AI agent with tool use capabilities",
+		icon: Zap,
+		data: {
+			Action: "AI",
+			description: "AI agent node",
+			node_: {
+				credential: "",
+				message: "",
+				tools: {},
+			},
+		},		
+	}
 ];
 
 export function AddNodeSelector() {

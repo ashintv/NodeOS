@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { GmailIcon } from "@/icons/gmail";
 import type { NodeData } from "../types";
 import { CredentialSelector } from "../credential-selector";
+import { DeleteNode } from "../deleteNode";
 
 export const GmailNode = memo(({ data, id }: NodeProps<NodeData>) => {
 	const { setNodes } = useReactFlow();
@@ -27,7 +28,7 @@ export const GmailNode = memo(({ data, id }: NodeProps<NodeData>) => {
 				return node;
 			})
 		);
-	}, [message, setNodes, id , credential]);
+	}, [message, setNodes, id, credential]);
 
 	return (
 		<BaseNode className="w-96">
@@ -36,13 +37,20 @@ export const GmailNode = memo(({ data, id }: NodeProps<NodeData>) => {
 			<BaseNodeHeader>
 				<GmailIcon className="size-5" />
 				<BaseNodeHeaderTitle>Send a mail</BaseNodeHeaderTitle>
+				<DeleteNode id={id} />
 			</BaseNodeHeader>
 			<BaseNodeContent className="flex gap-2">
 				<Textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Enter your message" />
 			</BaseNodeContent>
-			<BaseNodeFooter><CredentialSelector value={credential} platform="Gmail" onChange={(value) => {
-				setCredential(value);
-			}} /></BaseNodeFooter>
+			<BaseNodeFooter>
+				<CredentialSelector
+					value={credential}
+					platform="Gmail"
+					onChange={(value) => {
+						setCredential(value);
+					}}
+				/>
+			</BaseNodeFooter>
 		</BaseNode>
 	);
 });

@@ -31,15 +31,13 @@ export function CredentialSelector({
 		}
 	};
 	useEffect(() => {
-        fetchOptions();
+		fetchOptions();
 	}, []);
 
-    const handleChange = (value: string) => {
-        setSelectedCredential(value);
-        onChange(value);
-    }
-
-
+	const handleChange = (value: string) => {
+		setSelectedCredential(value);
+		onChange(value);
+	};
 
 	return (
 		<div className="space-y-2 w-full">

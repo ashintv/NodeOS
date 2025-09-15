@@ -20,11 +20,17 @@ import { useCurrentGraphStateStore } from "@/store/state-store";
 import { TriggerNode } from "./nodes/trigger/trigger-node";
 import { GmailNode } from "./nodes/action/gmail";
 import { TelegramNode } from "./nodes/action/telagram";
+import { AIAgent } from "./nodes/action/ai-agent";
+import { CallApi } from "./nodes/tools/callApi";
+import { CodeRun } from "./nodes/tools/codeRun";
 
 export const nodesTypes = {
 	trigger: TriggerNode,
 	gmail: GmailNode,
 	telegram: TelegramNode,
+	ai: AIAgent,
+	callApi: CallApi,
+	codeRun: CodeRun,
 };
 
 export function GraphChart() {
