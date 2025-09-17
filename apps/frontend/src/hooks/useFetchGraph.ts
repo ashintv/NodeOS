@@ -29,7 +29,7 @@ export function useGraphs() {
 
 	useEffect(() => {
 		fetchData();
-	}, []);
+	}, [id]);
 
 	return {
 		initialEdges,

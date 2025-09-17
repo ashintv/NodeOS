@@ -59,13 +59,7 @@ export function Sidebar({ onViewChange, currentView }: SidebarProps) {
 						<Menu className="h-5 w-5" />
 					</Button>
 				</SheetTrigger>
-				<SheetContent side="left" className="w-80 bg-aesthetic backdrop-blur-xl border-border">
-					<div className="absolute inset-0 opacity-40">
-						{/* Gradient overlay for sidebar */}
-						<div className="bg-aesthetic-overlay" />
-						{/* Subtle grid pattern */}
-						<div className="bg-aesthetic-grid" />
-					</div>
+				<SheetContent side="left" className="w-80  backdrop-blur-xl border-border">
 					<div className="relative z-10 h-full">
 						<SidebarContent
 							menuItems={menuItems}
@@ -78,14 +72,7 @@ export function Sidebar({ onViewChange, currentView }: SidebarProps) {
 				</SheetContent>
 			</Sheet>
 
-			{/* Desktop Sidebar */}
-			<div className="hidden lg:flex w-80 bg-aesthetic backdrop-blur-xl border-r border-border h-full relative overflow-hidden">
-				<div className="absolute inset-0 opacity-40">
-					{/* Gradient overlay for sidebar */}
-					<div className="bg-aesthetic-overlay" />
-					{/* Subtle grid pattern */}
-					<div className="bg-aesthetic-grid" />
-				</div>
+			<div className="hidden lg:flex w-80  backdrop-blur-xl border-r border-border h-full relative overflow-hidden">
 				<div className="relative z-10 w-full">
 					<SidebarContent
 						menuItems={menuItems}
@@ -125,8 +112,8 @@ function SidebarContent({ menuItems, workflows, onViewChange, currentView, onIte
 						<Workflow className="h-6 w-6 text-primary-foreground" />
 					</div>
 					<div>
-						<h2 className="text-foreground font-bold text-lg">NtoX Dashboard</h2>
-						<p className="text-muted-foreground text-sm">Workflow Manager</p>
+						<h2 className="text-foreground font-bold text-lg">x4x</h2>
+						<p className="text-muted-foreground text-sm">Workflows</p>
 					</div>
 				</div>
 			</div>
@@ -154,7 +141,6 @@ function SidebarContent({ menuItems, workflows, onViewChange, currentView, onIte
 
 			{/* Main Navigation */}
 			<div className="space-y-2 mb-6">
-				<h3 className="text-muted-foreground text-sm font-medium uppercase tracking-wider mb-3">Main Features</h3>
 				{menuItems.map((item) => {
 					const Icon = item.icon;
 					const isActive = currentView === item.id;
@@ -184,7 +170,7 @@ function SidebarContent({ menuItems, workflows, onViewChange, currentView, onIte
 			{/* Additional Features */}
 			<div className="space-y-2 mb-6">
 				<h3 className="text-muted-foreground text-sm font-medium uppercase tracking-wider mb-3">WorkFlows</h3>
-				<div className="h-60 overflow-scroll">
+				<div className="h-70 overflow-scroll">
 					{workflows.map((item, index) => {
 						return <WorkflowItem key={index} title={item.title} isSelected={selected == item._id} id={item._id} />;
 					})}
@@ -203,7 +189,6 @@ function SidebarContent({ menuItems, workflows, onViewChange, currentView, onIte
 							enabled: true,
 						};
 						const response = await axios.post(BASE_URL + "/workflow", data, {
-							
 							headers: {
 								token: localStorage.getItem("token"),
 							},

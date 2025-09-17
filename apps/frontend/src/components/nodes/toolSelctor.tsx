@@ -72,7 +72,7 @@ export function ToolSelector({ id }: { id: string }) {
 					target: toolNodeId,
 					sourceHandle: "bottom-tools", 
 					targetHandle: null,
-					animated: true,
+					animated: false,
 				};
 				return [...edges, newEdge];
 			});

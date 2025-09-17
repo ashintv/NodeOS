@@ -17,7 +17,7 @@ app.use("/api/v1/credential", CredentialRouter);
 app.use("/api/v1/webhook", WebhookRouter);
 
 async function Starserver() {
-    await mongoose.connect("mongodb://localhost:27017/x4x_db_v0");
+    await mongoose.connect("mongodb://localhost:27017/x4x_db");
 	app.listen(3000, () => {
 		console.log("Server started successfully");
 	});

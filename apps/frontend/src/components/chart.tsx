@@ -37,7 +37,6 @@ export function GraphChart() {
 	const { initialEdges, initialNodes, isLoaded } = useGraphs();
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
 	useEffect(() => {
 		if (isLoaded && initialNodes.length > 0) {
 			setNodes(initialNodes);
@@ -102,13 +101,16 @@ export function GraphChart() {
 				onConnect={onConnect}
 				nodeTypes={nodesTypes}
 				fitView
+				deleteKeyCode={["Delete", "Backspace"]}
 				attributionPosition="bottom-left">
-				<Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--workflow-background-dots)" />
-				<Controls className="bg-card border border-border rounded-lg shadow-sm" />
+				<Background variant={BackgroundVariant.Dots} />
+				<Controls className="text-black bg-transparent" orientation="horizontal" />
 				<MiniMap
-					className="bg-card border border-border rounded-lg shadow-sm"
-					nodeColor="var(--workflow-node)"
-					maskColor="var(--workflow-minimap-mask)"
+					maskColor="rgba(0,0,0,0.1)"
+					style={{
+						backgroundColor: "transparent",
+						border: "1px solid #444",
+					}}
 				/>
 			</ReactFlow>
 		</div>

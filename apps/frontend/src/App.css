@@ -176,12 +176,7 @@
   }
 
   /* Background Aesthetic Component Styles */
-  .bg-aesthetic {
-    background: linear-gradient(135deg, var(--bg-aesthetic-primary) 0%, var(--bg-aesthetic-secondary) 50%, var(--bg-aesthetic-tertiary) 100%);
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-  }
+  
 
   .bg-aesthetic-overlay {
     position: absolute;

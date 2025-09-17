@@ -1,44 +1,21 @@
 import { CredentialModel } from "@repo/backend-core/db";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import TOOLS_MAP from "./ai-agent-tools.ts/index.js";
+import { tool } from "@langchain/core/tools";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { INodeData } from "@repo/definitions/types";
-
+import { INodeData, Tool } from "@repo/definitions/types";
+import { getToolfunction, getToolschema } from "./utils/ai-node-helpers";
 
 /**
- * create and run a agent with the specified model and tools
- * @param node
+ * excute an ai agent give prompt and array of tool to it
+ * @param prompt 
+ * @param user_tools 
  */
-async function useToolCal(node: INodeData) {
-	// finf credential from db
-	// const api  =  await CredentialModel.findById(node.credential)
+async function executeAgent(prompt: string, user_tools: Tool[]) {
 	const apiKey = "AIzaSyDMe6hC35_3rBvYwApbxzoDpvbtg9SGfEo";
-	const tools: any = [];
-
-	// loop through the tools and add them to the tools array
-	// only add tools that are in the TOOLS_MAP
-	// if tool is not in the TOOLS_MAP, ignore it
-
-	const tools_names = Object.keys(node.tools);
-	tools_names.forEach((tool) => {
-		if (TOOLS_MAP[tool as keyof typeof TOOLS_MAP]) {
-			tools.push(TOOLS_MAP[tool as keyof typeof TOOLS_MAP]);
-		}
+	const tools: any[] = [];
+	user_tools.forEach((t) => {
+		tools.push(tool(getToolfunction(t), getToolschema(t)));
 	});
-
-	// genrate system prompt from node.prompt
-	const systemPrompt = `
-				* . you are an helpfull agent that help users to do some work by answering them
-				* . you can use any tools provided to you to answer the users question,
-				* . here some metadata you can use to answer user quest -
-							${Object.values(node.tools)
-								.map((tool) => {
-									if ("desc" in tool) {
-										return `=> . ${tool.desc}`;
-									}
-								})
-								.join("\n")}
-	`;
 	const model = new ChatGoogleGenerativeAI({
 		apiKey,
 		temperature: 0.5,
@@ -51,14 +28,16 @@ async function useToolCal(node: INodeData) {
 	});
 
 	const resp = await agent.invoke({
-		messages: [
-			{
-				role: "system",
-				content: systemPrompt,
-			},
-			{ role: "user", content: node.message! },
-		],
+		messages: [{ role: "user", content: prompt }],
 	});
 	console.log(resp);
 }
 
+executeAgent("what is the price of solana", [
+	{
+		name: "solanaPriceGet",
+		type: "callApi",
+		url: "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd",
+		desc: "this tool will get you current solana price",
+	},
+]);

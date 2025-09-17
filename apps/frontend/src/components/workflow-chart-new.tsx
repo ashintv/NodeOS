@@ -55,16 +55,7 @@ export function WorkflowChart() {
 				<GraphChart />
 			</div>
 
-			{/* Status Bar */}
-			<div className="p-3 border-t border-border bg-muted">
-				<div className="flex items-center justify-between text-sm">
-					<div className="flex items-center space-x-4 text-muted-foreground"></div>
-					<div className="flex items-center space-x-2">
-						<div className={`w-2 h-2 rounded-full ${isRunning ? "bg-chart-2" : "bg-muted-foreground"} animate-pulse`} />
-						<span className="text-muted-foreground">{isRunning ? "Running" : "Stopped"}</span>
-					</div>
-				</div>
-			</div>
+			
 		</div>
 	);
 }

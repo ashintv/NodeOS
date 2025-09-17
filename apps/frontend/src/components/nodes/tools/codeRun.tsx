@@ -53,7 +53,7 @@ function CodeRunForm({ data, id, onClose }: { data: any; id: string; onClose: ()
 						data: {
 							...node.data,
 							...formData,
-							language, // Save the language state
+							language, 
 						},
 					};
 				}
@@ -142,4 +142,4 @@ function CodeRunForm({ data, id, onClose }: { data: any; id: string; onClose: ()
 	);
 }
 
-// add code for card component (monaco editor card)
+
