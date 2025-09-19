@@ -1,3 +1,9 @@
-tmarrow check if the function ( getOrderExecutionInfo ) return s the correct order execution information.
+Changes in front-end
+gmail requires an api key from ( resend )
+if node mailer also installed and suppored  res++
+
+some nodes will returns some data (nodeRes.data) and some will not
+   1 - ai node will return data( ai response)
 
 
+hence detailed form or fe fetures should be added in the front end

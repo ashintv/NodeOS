@@ -4,6 +4,8 @@ import { WorkflowRouter } from "./routes/workflow";
 import { CredentialRouter } from "./routes/credential";
 import { WebhookRouter } from "./routes/webhook";
 import { mongoose } from "@repo/backend-core/db";
+import { config } from "dotenv";
+config()
 import cors from "cors"
 
 const app = express();

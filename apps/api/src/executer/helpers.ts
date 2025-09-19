@@ -30,17 +30,15 @@ export function findOrderofExecutionBFS(nodes: any[], edges: any[]) {
 		const node = nodeMap.get(nodeId);
 		if (!node) continue;
 
-		console.log(`Step: ${node.type} (${node.id})`);
 		order.push(node);
 
 		const children = graph[nodeId] || [];
 
 		for (const cid of children) {
 			const child = nodeMap.get(cid);
-
+			console.log(child);
 			if (node.type === "ai" && child?.type === "callApi") {
-				console.log(`  ↳ Tool: ${child.type} (${child.id})`);
-				order.push({ id: child.id, type: child.type, tool: true });
+				order.push({ ...child });
 				visited.add(cid); // mark as processed, since not queued
 			} else if (child && !visited.has(cid)) {
 				queue.push(cid);
@@ -50,14 +48,6 @@ export function findOrderofExecutionBFS(nodes: any[], edges: any[]) {
 
 	return order;
 }
-
-
-
-
-
-
-
-
 
 /**
  * Find all tools that are connected to the AI node.
@@ -70,17 +60,16 @@ export function findToolsForAINode(id: string, nodes: any[], connections: any[])
 	const tools: Tool[] = [];
 
 	const incomingConnections = connections.filter((conn) => conn.source === id);
-	console.log("incoming connenction", incomingConnections);
 
 	incomingConnections.forEach((conn) => {
 		const targetNodeId = conn.target;
-		console.log("targetNodeId", targetNodeId);
+
 		const targetNode = nodes.find((node) => node.id === targetNodeId);
-		console.log("targetNode", targetNode);
+
 		if (targetNode) {
 			tools.push(targetNode.data);
 		}
 	});
-	console.log("tools", tools);
+
 	return tools;
 }

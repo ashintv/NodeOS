@@ -2,8 +2,9 @@ import { Plus } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useReactFlow } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import type { ToolsType } from "@repo/definitions/types";
 
+
+type ToolsType = any
 const ToolOptions = [
 	{ title: "GET", type: "callApi" },
 	{

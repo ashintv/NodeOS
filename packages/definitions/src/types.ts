@@ -1,7 +1,5 @@
-
-
 export type Tool = {
-	name:string,
+	name: string;
 	type: "callApi";
 	url?: string;
 	desc: string;
@@ -23,14 +21,12 @@ export type CodeRun = {
 	};
 };
 
-
 export type INodeData = {
 	// node type
 	Action: "GMAIL" | "TELEGRAM" | "AI" | "TOOL";
 	description: string;
 	credential: string;
 	message?: string; // prompt
-
 
 	// optional for triggers
 	// allow future extensible fields
@@ -44,3 +40,10 @@ export interface INode {
 	icon?: any;
 	data: any;
 }
+
+export type Noderesponse = {
+	status: "succes" | "fail";
+	node: string;
+	message?: string;
+	data:any
+};

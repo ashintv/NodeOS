@@ -1,12 +1,14 @@
+import { excuteWorkflow } from '../executer/excetuter';
 import { Router } from "express";
-import { excuteWorkflow } from "../executer";
+
 
 export const WebhookRouter: Router = Router();
 
 WebhookRouter.get("/webhook/handler/:id", async (req, res) => {
+	res.setHeader("Content-Type", "text/event-stream");
+	res.setHeader("Cache-Control", "no-cache");
+	res.setHeader("Connection", "keep-alive");
 	const { id } = req.params;
-	const result = await excuteWorkflow(id , res);
-	res.json({
-		result,
-	});
+	excuteWorkflow(id, res);
+	
 });

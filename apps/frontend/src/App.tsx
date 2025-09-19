@@ -4,6 +4,7 @@ import SignIn from "./pages/signin";
 import SignUp from "./pages/signup";
 import Dashboard from "./pages/dashboard";
 import { ThemeProvider } from "./lib/theme-context";
+import { TrialPage } from "./pages/trialpage";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 						<Route path="/signin" element={<SignIn />} />
 						<Route path="/signup" element={<SignUp />} />
 						<Route path="/dashboard" element={<Dashboard />} />
+						<Route path="/trial" element={<TrialPage />} />
 					</Routes>
 				</Router>
 			</ThemeProvider>
