@@ -67,4 +67,5 @@ export type JobNotification = {
 	id: string;
 	status: "pending" | "in_progress" | "completed" | "failed";
 	result?: TODO;
+	error?: TODO;
 }

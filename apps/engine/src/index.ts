@@ -1,5 +1,5 @@
-import { redisClient , type RedisClientType } from "@repo/backend-core/redis";
-import type { Job, JobNotification } from "@repo/definitions/types";
+import { redisClient, type RedisClientType } from "@repo/backend-core/redis";
+import type { Job, JobNotification, TODO } from "@repo/definitions/types";
 
 class Engine {
   private redisClient: RedisClientType;
@@ -11,7 +11,7 @@ class Engine {
     this.start();
   }
   async init() {
-    try{
+    try {
       await this.redisClient.connect();
       console.log("Connecting to Redis...");
       await this.redisClient.ping();
@@ -23,45 +23,53 @@ class Engine {
     }
   }
 
-  async start(){
+  async start() {
     while (true) {
-      const data  = await this.redisClient.brPop("engine_jobs", 0) ;
+      const data = await this.redisClient.brPop("engine_jobs", 0);
       if (!data) continue;
       const job: Job = JSON.parse(data.element);
       console.log("Processing job:", job);
       await this.Notify({
         id: job.id,
         status: "in_progress",
-        result: {}
+        result: {},
       });
-      switch (job.type) {
-        case "GMAIL":
-          // process gmail job
-          // await excuteGmailJob(job , this.Notify);
-          break;
-        case "TELEGRAM":
-          // process telegram job
-          break;
-        case "AI":
-          // process ai job
-          break;
-        case "TOOL":
-          // process tool job
-          break;
-        default:
-          console.log("Unknown job type:", job.type);
+      try {
+        switch (job.type) {
+          case "GMAIL":
+            // process gmail job
+            // await excuteGmailJob(job , this.Notify);
+            break;
+          case "TELEGRAM":
+            // process telegram job
+            break;
+          case "AI":
+            // process ai job
+            break;
+          case "TOOL":
+            // process tool job
+            break;
+          default:
+            console.log("Unknown job type:", job.type);
+        }
+        await this.Notify({
+          id: job.id,
+          status: "completed",
+          result: {},
+        });
+        console.log("Job completed successfully:", job.id);
+      } catch (e) {
+        console.log("Error processing job:", e);
+        await this.Notify({
+          id: job.id,
+          status: "failed",
+          result: {},
+          error: e,
+        });
       }
-
-      await this.Notify({
-        id: job.id,
-        status: "completed",
-        result: {}
-      });
     }
   }
-
-
-  async Notify( message: JobNotification ): Promise<void> {
-    await this.publisher.publish("engine_notifications", JSON.stringify({ message }) );
+  async Notify(message: JobNotification): Promise<void> {
+    await this.publisher.publish("engine_notifications", JSON.stringify({ message }));
   }
 }
