@@ -47,3 +47,24 @@ export type Noderesponse = {
 	message?: string;
 	data:any
 };
+
+
+/**
+ * providing a global types to job for better type checking
+ */
+export type TODO = any
+export type NodeTypes = "GMAIL" | "TELEGRAM" | "AI" | "TOOL";
+export type Job = {
+	id: string;
+	type: NodeTypes;
+	creadential: TODO
+	payload: TODO
+	status: "pending" | "in_progress" | "completed" | "failed";
+	result: TODO;
+}
+
+export type JobNotification = {
+	id: string;
+	status: "pending" | "in_progress" | "completed" | "failed";
+	result?: TODO;
+}

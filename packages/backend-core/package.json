@@ -7,11 +7,12 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
-		"@repo/typescript-config": "workspace:*",
 		"@repo/definitions": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
 		"@types/dotenv": "^8.2.3",
 		"dotenv": "^17.2.2",
-		"mongoose": "^8.18.1"
+		"mongoose": "^8.18.1",
+		"redis": "^5.9.0"
 	},
 	"exports": {
 		"./*": "./src/*.ts"
