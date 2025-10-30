@@ -1,4 +1,4 @@
-import type { TODO } from "@repo/definitions/types";
+import type { Job, TODO } from "@repo/definitions/types";
 
 class AI {
   private providor: string;
@@ -24,4 +24,15 @@ class AI {
   private setAgent() {
     // based on providor return the agent instnce\
   }
+}
+
+
+
+export async function executeAIJob(job: Job):Promise<TODO> {
+  // fetch node data from db
+  const nodeData: any = {}; // replace with actual db fetch
+  console.log("Executing AI job:", job.id);
+  const ai = new AI("OpenAI", nodeData.apiKey, nodeData.model);
+  const response = await ai.execute(nodeData.prompt, nodeData.tools);
+  return response;
 }

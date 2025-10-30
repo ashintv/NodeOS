@@ -1,7 +1,7 @@
-import type { Job, JobNotification, TODO } from "@repo/definitions/types";
+import type { Job, TODO } from "@repo/definitions/types";
 /**
  Contains utility functions for executing different types of jobs.
- 
+
  */
 
 
@@ -23,4 +23,3 @@ export async function executeGmailJob(job: Job):Promise<TODO> {
 }
 
 
-// create a wraper for ai here to handle different ai providers like openai , cohere , etc
