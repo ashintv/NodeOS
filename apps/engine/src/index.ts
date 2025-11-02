@@ -1,5 +1,6 @@
 import { redisClient, type RedisClientType } from "@repo/backend-core/redis";
 import type { Job, JobNotification, TODO } from "@repo/definitions/types";
+import { executeAIJob, executeGmailJob, executeTelegramJob } from "./nodes/action.js";
 
 class Engine {
   private redisClient: RedisClientType;
@@ -22,7 +23,7 @@ class Engine {
       console.log("Error connecting to Redis:", error);
     }
   }
-
+  
   async start() {
     while (true) {
       const data = await this.redisClient.brPop("engine_jobs", 0);
@@ -35,35 +36,27 @@ class Engine {
         result: {},
       });
       try {
+        let JobResult:Job;
         switch (job.type) {
           case "GMAIL":
-            // process gmail job
-            // await excuteGmailJob(job , this.Notify);
+            JobResult = await executeGmailJob(job);
             break;
           case "TELEGRAM":
-            // process telegram job
+            JobResult = await executeTelegramJob(job);
             break;
           case "AI":
-            // process ai job
-            break;
-          case "TOOL":
-            // process tool job
+            JobResult = await executeAIJob(job);
             break;
           default:
-            console.log("Unknown job type:", job.type);
+            throw new Error(`Unsupported job type: ${job.type}`);
         }
-        await this.Notify({
-          id: job.id,
-          status: "completed",
-          result: {},
-        });
+        await this.Notify({...JobResult, status: "completed" });
         console.log("Job completed successfully:", job.id);
       } catch (e) {
         console.log("Error processing job:", e);
         await this.Notify({
-          id: job.id,
+          ...job,
           status: "failed",
-          result: {},
           error: e,
         });
       }

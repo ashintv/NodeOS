@@ -9,10 +9,9 @@ import mongoose from "mongoose";
  * TELEGRAM
  * MONGODB
  * API CALL
- *
- *
- * ai node is in a separate file apps/engine/src/nodes/ai.ts
+ * ai node config is in a separate file apps/engine/src/nodes/ai.ts
  */
+
 
 /**
  * Fetches a credential by its ID.
@@ -143,4 +142,15 @@ export async function ApiCallJob(job: Job): Promise<Job> {
   const data = await response.json();
   job.result = data;
   return job;
+}
+
+
+
+export async function executeAIJob(job: Job):Promise<Job> {
+  // mmimicing ai execution
+  console.log("Executing AI job:", job.id);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  job.result = { Message: `AI job executed successfully for job id ${job.id}` };
+  return job;
+
 }
