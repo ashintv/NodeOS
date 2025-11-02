@@ -57,8 +57,8 @@ export type NodeTypes = "GMAIL" | "TELEGRAM" | "AI" | "TOOL";
 export type Job = {
 	id: string;
 	type: NodeTypes;
-	creadential: TODO
-	payload: TODO
+	creadential: string;
+	payload: TODO;
 	status: "pending" | "in_progress" | "completed" | "failed";
 	result: TODO;
 }

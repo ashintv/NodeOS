@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@repo/backend-core": "workspace:*",
-    "@repo/definitions": "workspace:*"
+    "@repo/definitions": "workspace:*",
+    "@types/nodemailer": "^7.0.3",
+    "nodemailer": "^7.0.10"
   }
 }
